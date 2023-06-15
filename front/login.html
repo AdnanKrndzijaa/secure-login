@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Login Form </title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
+   </head>
+<body>
+<div class="container" id="container">
+	<div class="form-container sign-in-container">
+		<form id="loginForm" action="#" onsubmit="return validateForm()">
+			<h1>Sign in</h1>
+      <input type="text" name="username" id="username" placeholder="Enter your username">
+      <input type="password" name="password" id="password" placeholder="Enter your password">
+			<div class="h-captcha" data-sitekey="8be0829c-d139-4fd8-b0c7-9dc6b66c4d26"></div>
+      <div class="error-message" id="errorMessage"></div>
+      <input type="submit" value="Login Now">
+      <a href="register.html"><strong>Do not have an account?</strong></a>
+      <a href="forgot.html">Forgot your password?</a>
+    </form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-right">
+				<h1>Welcome back!</h1>
+				<p>Enter your personal info and enjoy.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+      
+      
+
+  <style>
+    .error-message {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 3px;
+  text-align: center;
+}
+
+  </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+  <script src="user-service.js"></script>
+
+
+  <script>
+    function validateForm() {
+
+      
+
+
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+
+      var response = grecaptcha.getResponse();
+      
+
+    var passXhr = new XMLHttpRequest();
+    passXhr.open("GET", "../api/validatePassword.php?password=" + password, false);
+    passXhr.send();
+    if (passXhr.status !== 200) {
+      document.getElementById("errorMessage").textContent = "Error occurred during password validation.";
+      return false;
+    }
+    if (passXhr.responseText.trim() !== "valid") {
+      document.getElementById("errorMessage").textContent = "Weak password. Please choose a stronger password.";
+      return false;
+    }
+
+      
+
+    return true;
+  }
+
+  </script>
+
+  <script>
+    UserService.init();
+  </script>
+
+</body>
+</html>

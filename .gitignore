@@ -1,0 +1,6 @@
+vendor
+composer.json
+composer.lock
+.htaccess
+/api/.htaccess
+config_default.php

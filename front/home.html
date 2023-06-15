@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Home page </title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
+   </head>
+<body>
+<div class="container" id="container">
+	<div class="form-container sign-in-container">
+		<form action="#" onsubmit="return validateForm()">
+			<h1>Home page</h1>
+          <div id="data_user"></div>
+        <input type="submit" onclick="UserService.logout();" value="Logout">
+    </form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-right">
+				<h1>Welcome User!</h1>
+				<p>Enter your personal info and enjoy.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+      
+      
+
+  <style>
+    .error-message {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 3px;
+  text-align: center;
+}
+
+  </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/dist/jwt-decode.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+  <script src="user-service.js"></script>
+
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const phoneNumber = urlParams.get('phone');
+  
+  
+    function editProfile() {
+      var formData = new FormData();
+      formData.append("phone", phoneNumber);
+  
+      var queryString = new URLSearchParams(formData).toString();
+      var redirectUrl = "../api/profile.php?" + queryString;
+      window.location.href = redirectUrl;
+      return false; // Prevent form submission
+    }
+
+  </script>
+
+</body>
+
+<script>
+  var token = localStorage.getItem("token");
+    if (!token){
+      window.location.replace("login.html");
+    }
+</script>
+</html>

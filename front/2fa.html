@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> OTP Authentication </title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
+   </head>
+<body>
+<div class="container-qr" id="container">
+	<div class="form-container sign-in-container">
+    <form id="qrCodeForm">
+      <div id="qrCodeContainer">
+        <h2>Scan the QR Code</h2>
+        <div id="qrCode"></div>
+        <p>Enter the code from your phone:</p>
+        <input type="text" id="otpInput">
+        <p id="errorMessage"></p>
+        <button type="submit" id="submitBtn">Submit</button>
+        <p id="validationMessage"></p>
+      </div>
+    </form>
+    
+
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-right">
+				<h1>Scan it!</h1>
+				<p>Enter your verification code.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+      
+      
+
+  <style>
+    .error-message {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 3px;
+  text-align: center;
+}
+
+  </style>
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.1/dist/qrcode.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+
+  <script src="user-service.js"></script>
+  
+  <script>
+$(document).ready(function() {
+  UserService.init();
+
+  // Generate QR code
+  var secret;
+  $.ajax({
+    url: '../api/generateQRCode',
+    type: 'POST',
+    success: function(result) {
+      secret = result.secret;
+      var qrCodeUri = result.qrCodeUri;
+      $('#qrCode').html(`<img style="width:80%;" src="${qrCodeUri}" alt="QR Code">`);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      var errorMessage;
+      if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+        errorMessage = jqXHR.responseJSON.message;
+      } else {
+        errorMessage = "An error occurred.";
+      }
+      $('#errorMessage').text(errorMessage);
+    }
+  });
+
+  // Submit the OTP for validation
+  $('#qrCodeForm').submit(function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    var userInput = $('#otpInput').val();
+    $.ajax({
+      url: '../api/validateQRCode',
+      type: 'POST',
+      data: {
+        userInput: userInput,
+        secret: secret
+      },
+      success: function(result) {
+        if (result.isValid) {
+          // Redirect to the login page
+          window.location.replace("login.html");
+        } else {
+          // Display the error message
+          $('#validationMessage').text('Invalid code. Please try again.');
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        var errorMessage;
+        if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+          errorMessage = jqXHR.responseJSON.message;
+        } else {
+          errorMessage = "An error occurred.";
+        }
+        $('#errorMessage').text(errorMessage);
+      }
+    });
+  });
+});
+
+
+
+
+  </script>
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Welcome </title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
+   </head>
+<body>
+<div class="container" id="container">
+	<div class="form-container sign-in-container">
+		<form>
+      <a style="font-size: 30px;" href="register.html"><strong>Register now</strong></a>
+      <a style="font-size: 30px;" href="login.html">Login now</a>
+    </form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-right">
+				<h1>Welcome back!</h1>
+				<p>Secure Login Application.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  var token = localStorage.getItem("token");
+    if (token){
+      window.location.replace("home.html");
+    }
+</script>
+</body>
+</html>
